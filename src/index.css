@@ -16,6 +16,10 @@ code {
     monospace;
 }
 
+body > iframe {
+  display: none;
+}
+
 html, body, #root {
   @apply h-full;
 }

@@ -1,17 +1,20 @@
 // src/components/Login.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginRequest, googleSignInRequest } from '../../http_call/HttpRequest';
 import { HOST_URL_GG_LOGIN } from '../../service_url/AppUrlConfig'; 
 import './login.css';
 import { ReactComponent as GoogleIcon } from './assets/google-icon.svg'; 
+import AuthContext from '../../auth/state/AuthContext';
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [error, setError]       = useState(null);
+  const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,6 +28,12 @@ const Login = () => {
       // save JWT Token if login success
       if (token) {
         localStorage.setItem('authToken', token);
+      }
+      if (token) {
+        dispatch({ type: "LOGIN", payload: { token } });
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        document.cookie = `user_auth=${token}; path=/; SameSite=Lax`;
       }
 
       // after Login, go to main page

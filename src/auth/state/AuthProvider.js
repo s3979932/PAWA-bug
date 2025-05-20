@@ -5,6 +5,7 @@ import AuthContext from "./AuthContext";
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  console.log("AuthProvider state.token =", state.token);
   // On mount, check for token in localStorage
   useEffect(() => {
     const token = localStorage.getItem("token");
